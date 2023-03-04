@@ -3,10 +3,12 @@ import java.net.URL;
 import java.util.ResourceBundle;
 
 import javax.swing.JOptionPane;
+import javax.swing.JPanel;
 
 import com.mysql.jdbc.exceptions.MySQLIntegrityConstraintViolationException;
 
 import java.sql.*;
+import java.time.LocalDate;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -98,15 +100,7 @@ public class CreditController implements Initializable{
             
                                             JOptionPane.showMessageDialog(null, "NOVI KREDIT DODAN U BAZU");
 
-                                            jmbgKomitentField.clear();
-                                            idCreditField.clear();
-                                            datePaymentField.setValue(null);
-                                            loanAmountField.clear();
-                                            interestRateField.clear();
-                                            repaymentMonthsField.clear();
-                                            regionField.setValue(null);
-                                            branchOfficeField.setValue(null);
-                                            officeField.setValue(null);
+                                           clearFileds();
                                         }
                                         catch(MySQLIntegrityConstraintViolationException e){
                                             JOptionPane.showMessageDialog(null, "BROJ KREDITA POSTOJI U BAZI");   
@@ -148,6 +142,7 @@ public class CreditController implements Initializable{
                 if(result.next()){
                     stmn.execute(String.format("DELETE FROM Kredit WHERE idKredit = \"%s\"",idCreditField.getText()));
                     JOptionPane.showMessageDialog(null, "KREDIT OBRISAN");
+                    clearFileds();
                 }else{
                     JOptionPane.showMessageDialog(null, "KREDIT NE POSTOJI U BAZI");
                 }
@@ -160,8 +155,98 @@ public class CreditController implements Initializable{
         }
     }
 
-    public void onChange(ActionEvent event){
+    public void onChange(ActionEvent event) throws SQLException{
+        try{
+            Integer.parseInt(idCreditField.getText());
 
+            Statement stmn = Main.dbConnection.createStatement();
+            ResultSet result = stmn.executeQuery(String.format("SELECT * FROM Kredit WHERE idKredit = \"%s\"", idCreditField.getText()));
+
+            if(result.next()){
+                    
+                if(!jmbgKomitentField.getText().isEmpty()){
+                    try{
+                        Long.parseLong(jmbgKomitentField.getText());
+
+                        if(jmbgKomitentField.getText().length() != 13){
+                            JOptionPane.showMessageDialog(null, "JMBG MORA IMATI 13 BROJEVA");
+                        }else{
+                            stmn.execute(String.format("UPDATE Kredit SET JMBGkomitent = \"%s\" WHERE idKredit = \"%s\""
+                            ,jmbgKomitentField.getText(),idCreditField.getText()));
+                        }
+                    }
+                    catch(NullPointerException e){
+                        JOptionPane.showMessageDialog(null, "JMBG NIJE VALIDAN");
+                    }
+                }
+
+                if(datePaymentField.getValue() != null){
+                    if(datePaymentField.getValue().isBefore(LocalDate.now()) || datePaymentField.getValue().isEqual(LocalDate.now()))
+                        stmn.execute(String.format("UPDATE Kredit SET datumIsplata = \"%s\" WHERE idKredit = \"%s\""
+                        ,datePaymentField.getValue(),idCreditField.getText()));
+                    else{
+                        JOptionPane.showMessageDialog(null,"ERROR: DATUM VEĆI OD DANJAŠNJEG!!!");
+                    }
+                }
+
+                if(!loanAmountField.getText().isEmpty()){
+                    try{
+                        Double.parseDouble(loanAmountField.getText());
+                        stmn.execute(String.format("UPDATE Kredit SET iznosIsplKredit = %s WHERE idKredit = \"%s\""
+                        ,loanAmountField,idCreditField.getText()));
+                    }
+                    catch(NumberFormatException e){
+                        JOptionPane.showMessageDialog(null,"ERROR: IZNOS ISPLATE NIJE VALIDAN");
+                    }
+                }
+
+                if(!interestRateField.getText().isEmpty()){
+                    try{
+                        if((Double.parseDouble(interestRateField.getText()) > 0 && 
+                            Double.parseDouble(interestRateField.getText()) <= 100)){
+
+                                stmn.execute(String.format("UPDATE Kredit SET kamatnaStopa = %s WHERE idKredit = \"%s\""
+                                ,interestRateField.getText(),idCreditField.getText()));
+                        }else{
+                            JOptionPane.showMessageDialog(null,"ERROR: KAMATNA STOPA MORA BITI U INTERVALU 1-100%");
+                        }
+                    }
+                    catch(NullPointerException e){
+                        JOptionPane.showMessageDialog(null,"ERROR: IZNOS KAMATNE STOPE NIJE VALIDAN");
+                    }
+                }
+
+                if(!repaymentMonthsField.getText().isEmpty()){
+                    try{
+                        if((Double.parseDouble(repaymentMonthsField.getText()) > 0 && 
+                            Double.parseDouble(repaymentMonthsField.getText()) <= 100)){
+
+                                stmn.execute(String.format("UPDATE Kredit SET rokOtplKredit = %s WHERE idKredit = \"%s\""
+                                ,repaymentMonthsField.getText(),idCreditField.getText()));
+                        }else{
+                            JOptionPane.showMessageDialog(null,"ERROR: BROJ MJESECI MORA BITI U INTERVALU 1-100");
+                        }
+                    }
+                    catch(NullPointerException e){
+                        JOptionPane.showMessageDialog(null,"ERROR: ROK OTPLATE NIJE VALIDAN");
+                    }
+                }
+
+                if(officeField.getValue() != null){
+                    stmn.execute(String.format("UPDATE Kredit SET uredIsplata = \"%s\" WHERE idKredit = \"%s\""
+                    ,officeField.getValue(),idCreditField.getText()));
+                }
+
+                JOptionPane.showMessageDialog(null, "IZMJENE IZVRŠENE");
+
+                clearFileds();
+            }else{
+                JOptionPane.showMessageDialog(null, "KREDIT NE POSTOJI U BAZI");
+            }
+        }
+        catch(NumberFormatException e){
+             JOptionPane.showMessageDialog(null, "JMBG NIJE VALIDAN"); 
+        }
     }
 
     public void chooseBranchOffice(){
@@ -178,6 +263,18 @@ public class CreditController implements Initializable{
         officeField.getItems().removeAll(officeField.getItems());
         officeField.getItems().addAll(branchOffice.getOffices());
 
+    }
+
+    public void clearFileds(){
+        jmbgKomitentField.clear();
+        idCreditField.clear();
+        datePaymentField.setValue(null);
+        loanAmountField.clear();
+        interestRateField.clear();
+        repaymentMonthsField.clear();
+        regionField.setValue(null);
+        branchOfficeField.setValue(null);
+        officeField.setValue(null);
     }
 
 }

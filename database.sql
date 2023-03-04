@@ -1,5 +1,6 @@
 CREATE DATABASE bospo;
 USE bospo;
+
 SELECT * FROM Komitent;
 CREATE TABLE Komitent(
 JMBG CHAR(13) PRIMARY KEY, 

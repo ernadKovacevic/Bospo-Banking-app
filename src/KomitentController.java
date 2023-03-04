@@ -77,12 +77,7 @@ public class KomitentController implements Initializable {
 
                         JOptionPane.showMessageDialog(null, "NOVI KOMITENT DODAN U BAZU");
 
-                        jmbgField.clear();
-                        nameField.clear();
-                        surnameField.clear();
-                        dateField.setValue(null);
-                        cityField.setValue(null);
-                        addressField.clear();
+                        clearFileds();
                     }else{
                         JOptionPane.showMessageDialog(null, "DATUM VEĆI OD DANAŠNJEG");
                     }
@@ -98,79 +93,97 @@ public class KomitentController implements Initializable {
     }
 
     public void onDelete(ActionEvent event){
-        if(jmbgField.getLength() !=13 ){
-            JOptionPane.showMessageDialog(null, "UNESITE VALIDAN JMBG!!!");
-        }else{
-            try{
-                Statement stmn = Main.dbConnection.createStatement();
-                ResultSet results = stmn.executeQuery(String.format("SELECT * FROM Komitent WHERE JMBG = \"%s\"", jmbgField.getText()));
-                if(results.next()){
-                    stmn.execute(String.format("DELETE FROM Komitent WHERE JMBG = \"%s\"",jmbgField.getText()));
-                    JOptionPane.showMessageDialog(null,"KOMITENT OBRISAN IZ BAZE");
-                }else{
-                    JOptionPane.showMessageDialog(null,"KOMITENT NE POSTOJI U BAZI");
+        try{
+            Long.parseLong(jmbgField.getText());
+            if(jmbgField.getLength() !=13 ){
+                JOptionPane.showMessageDialog(null, "UNESITE VALIDAN JMBG!!!");
+            }else{
+                try{
+                    Statement stmn = Main.dbConnection.createStatement();
+                    ResultSet results = stmn.executeQuery(String.format("SELECT * FROM Komitent WHERE JMBG = \"%s\"", jmbgField.getText()));
+                    if(results.next()){
+                        stmn.execute(String.format("DELETE FROM Komitent WHERE JMBG = \"%s\"",jmbgField.getText()));
+                        JOptionPane.showMessageDialog(null,"KOMITENT OBRISAN IZ BAZE");
+                        clearFileds();
+                    }else{
+                        JOptionPane.showMessageDialog(null,"KOMITENT NE POSTOJI U BAZI");
+                    } 
+                }
+                catch(Exception e){
+                    JOptionPane.showMessageDialog(null,"ERROR");
                 }
             }
-            catch(Exception e){
-                JOptionPane.showMessageDialog(null,"ERROR");
-            }
+        }
+        catch(NumberFormatException e){
+            JOptionPane.showMessageDialog(null, "JMBG NIJE VALIDAN"); 
         }
     }
     //promjena svih vrijednosti ili samo onih koje unesemo(gubi se mogucnost za NULL) 
     public void onChange(ActionEvent event){
-        if(jmbgField.getLength() !=13 ){
-            JOptionPane.showMessageDialog(null, "JMBG MORA IMATI 13 BROJEVA!!!");
-        }else{
-            try{
-                Statement stmn = Main.dbConnection.createStatement();
-                Statement checkJMBG = Main.dbConnection.createStatement();
-                ResultSet results = checkJMBG.executeQuery(String.format("SELECT * FROM Komitent WHERE JMBG = \"%s\"", jmbgField.getText()));
+        try{
+            Long.parseLong(jmbgField.getText());
+
+            if(jmbgField.getLength() !=13 ){
+                JOptionPane.showMessageDialog(null, "JMBG MORA IMATI 13 BROJEVA!!!");
+            }else{
+                try{
+                    Statement stmn = Main.dbConnection.createStatement();
+                    ResultSet results = stmn.executeQuery(String.format("SELECT * FROM Komitent WHERE JMBG = \"%s\"", jmbgField.getText()));
                 
-                if(results.next()){
+                    if(results.next()){
 
-                    if(!nameField.getText().isEmpty()){
-                        stmn.execute(String.format("UPDATE Komitent SET ime = \"%s\" WHERE JMBG = \"%s\""
-                        ,nameField.getText(),jmbgField.getText()));
-                    }
-
-                    if(!surnameField.getText().isEmpty()){
-                        stmn.execute(String.format("UPDATE Komitent SET prezime = \"%s\" WHERE JMBG = \"%s\""
-                        ,surnameField.getText(),jmbgField.getText()));
-                    }
-
-                    if(dateField.getValue() != null){
-                        if(dateField.getValue().isBefore(LocalDate.now()))
-                            stmn.execute(String.format("UPDATE Komitent SET datumRodjenja = \"%s\" WHERE JMBG = \"%s\""
-                            ,dateField.getValue(),jmbgField.getText()));
-                        else{
-                            JOptionPane.showMessageDialog(null,"ERROR: DATUM VEĆI OD DANJAŠNJEG!!!");
+                        if(!nameField.getText().isEmpty()){
+                            stmn.execute(String.format("UPDATE Komitent SET ime = \"%s\" WHERE JMBG = \"%s\""
+                            ,nameField.getText(),jmbgField.getText()));
                         }
-                    }
 
-                    if(cityField.getValue() != null){
-                        stmn.execute(String.format("UPDATE Komitent SET grad = \"%s\" WHERE JMBG = \"%s\""
-                        ,cityField.getValue(),jmbgField.getText()));
-                    }
+                        if(!surnameField.getText().isEmpty()){
+                            stmn.execute(String.format("UPDATE Komitent SET prezime = \"%s\" WHERE JMBG = \"%s\""
+                            ,surnameField.getText(),jmbgField.getText()));
+                        }
 
-                    if(!addressField.getText().isEmpty()){
-                        stmn.execute(String.format("UPDATE Komitent SET adresaStan = \"%s\" WHERE JMBG = \"%s\""
-                        ,addressField.getText(),jmbgField.getText()));
-                    }
+                        if(dateField.getValue() != null){
+                            if(dateField.getValue().isBefore(LocalDate.now()))
+                                stmn.execute(String.format("UPDATE Komitent SET datumRodjenja = \"%s\" WHERE JMBG = \"%s\""
+                                ,dateField.getValue(),jmbgField.getText()));
+                            else{
+                                JOptionPane.showMessageDialog(null,"ERROR: DATUM VEĆI OD DANJAŠNJEG!!!");
+                            }
+                        }
+
+                        if(cityField.getValue() != null){
+                            stmn.execute(String.format("UPDATE Komitent SET grad = \"%s\" WHERE JMBG = \"%s\""
+                            ,cityField.getValue(),jmbgField.getText()));
+                        }
+
+                        if(!addressField.getText().isEmpty()){
+                            stmn.execute(String.format("UPDATE Komitent SET adresaStan = \"%s\" WHERE JMBG = \"%s\""
+                            ,addressField.getText(),jmbgField.getText()));
+                        }
                  
-                    JOptionPane.showMessageDialog(null,"ISPRAVLJENI PODACI O KOMITENTU");
-                }else{
-                    JOptionPane.showMessageDialog(null,"KOMITENT NE POSTOJI U BAZI");
+                        JOptionPane.showMessageDialog(null,"ISPRAVLJENI PODACI O KOMITENTU");
+                        clearFileds();
+                    }else{
+                        JOptionPane.showMessageDialog(null,"KOMITENT NE POSTOJI U BAZI");
+                    }
+                }
+                catch(Exception e){
+                    JOptionPane.showMessageDialog(null,"ERROR");
                 }
             }
-            catch(Exception e){
-                JOptionPane.showMessageDialog(null,"ERROR");
-            }
-
+        }
+        catch(NumberFormatException e){
+            JOptionPane.showMessageDialog(null, "JMBG NIJE VALIDAN"); 
         }
     }
 
-
-
-
-
+    public void clearFileds(){
+        jmbgField.clear();
+        nameField.clear();
+        surnameField.clear();
+        dateField.setValue(null);
+        cityField.setValue(null);
+        addressField.clear();
+    }
+    
 }
