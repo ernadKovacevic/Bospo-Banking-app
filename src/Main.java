@@ -39,7 +39,7 @@ public class Main extends Application {
             Class.forName("com.mysql.jdbc.Driver");  
             dbConnection=DriverManager.getConnection(dbUrl, dbUsername, dbPassword);  
             System.out.printf("########DATABASE CONNECTED######## \n \n");  
-           // Tuzla.printOffices();
+           
             }
         catch(Exception e){ System.out.println(e);} 
         

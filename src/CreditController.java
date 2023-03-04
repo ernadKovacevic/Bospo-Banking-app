@@ -3,7 +3,6 @@ import java.net.URL;
 import java.util.ResourceBundle;
 
 import javax.swing.JOptionPane;
-import javax.swing.JPanel;
 
 import com.mysql.jdbc.exceptions.MySQLIntegrityConstraintViolationException;
 
@@ -205,8 +204,8 @@ public class CreditController implements Initializable{
                         if((Double.parseDouble(interestRateField.getText()) > 0 && 
                             Double.parseDouble(interestRateField.getText()) <= 100)){
 
-                                stmn.execute(String.format("UPDATE Kredit SET kamatnaStopa = %s WHERE idKredit = \"%s\""
-                                ,interestRateField.getText(),idCreditField.getText()));
+                            stmn.execute(String.format("UPDATE Kredit SET kamatnaStopa = %s WHERE idKredit = \"%s\""
+                            ,interestRateField.getText(),idCreditField.getText()));
                         }else{
                             JOptionPane.showMessageDialog(null,"ERROR: KAMATNA STOPA MORA BITI U INTERVALU 1-100%");
                         }
@@ -221,8 +220,8 @@ public class CreditController implements Initializable{
                         if((Double.parseDouble(repaymentMonthsField.getText()) > 0 && 
                             Double.parseDouble(repaymentMonthsField.getText()) <= 100)){
 
-                                stmn.execute(String.format("UPDATE Kredit SET rokOtplKredit = %s WHERE idKredit = \"%s\""
-                                ,repaymentMonthsField.getText(),idCreditField.getText()));
+                            stmn.execute(String.format("UPDATE Kredit SET rokOtplKredit = %s WHERE idKredit = \"%s\""
+                            ,repaymentMonthsField.getText(),idCreditField.getText()));
                         }else{
                             JOptionPane.showMessageDialog(null,"ERROR: BROJ MJESECI MORA BITI U INTERVALU 1-100");
                         }
@@ -250,7 +249,7 @@ public class CreditController implements Initializable{
     }
 
     public void chooseBranchOffice(){
-       
+    
         region = Main.Mi_Bospo.findRegion(regionField.getValue());
         branchOfficeField.getItems().removeAll(branchOfficeField.getItems());
         branchOfficeField.getItems().addAll(region.getBranchOffices());

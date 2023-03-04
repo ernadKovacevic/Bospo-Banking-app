@@ -69,7 +69,7 @@
                   </ImageView>
                </graphic>
             </Button>
-            <Button layoutX="355.0" layoutY="339.0" mnemonicParsing="false" prefHeight="40.0" prefWidth="230.0" text="Uradi izvještaj">
+            <Button layoutX="355.0" layoutY="339.0" mnemonicParsing="false" onAction="#doReport" prefHeight="40.0" prefWidth="230.0" text="Uradi izvještaj">
                <graphic>
                   <ImageView fitHeight="26.0" fitWidth="68.0" pickOnBounds="true" preserveRatio="true">
                      <image>
@@ -90,16 +90,16 @@
                   </InnerShadow>
                </effect>
             </Separator>
-            <DatePicker layoutX="419.0" layoutY="70.0" prefHeight="24.0" prefWidth="180.0" />
-            <DatePicker layoutX="419.0" layoutY="110.0" prefHeight="24.0" prefWidth="180.0" />
-            <ChoiceBox layoutX="335.0" layoutY="200.0" prefHeight="24.0" prefWidth="261.0" />
-            <ChoiceBox layoutX="336.0" layoutY="240.0" prefHeight="24.0" prefWidth="260.0" />
+            <DatePicker fx:id="dateFromField" layoutX="419.0" layoutY="70.0" prefHeight="24.0" prefWidth="180.0" promptText="MM/DD/YYYY" />
+            <DatePicker fx:id="dateToField" layoutX="419.0" layoutY="110.0" prefHeight="24.0" prefWidth="180.0" promptText="MM/DD/YYYY" />
+            <ChoiceBox fx:id="branchOfficeField" layoutX="335.0" layoutY="200.0" onMousePressed="#chooseBranchOffice" prefHeight="24.0" prefWidth="261.0" />
+            <ChoiceBox fx:id="officeField" layoutX="336.0" layoutY="240.0" onMousePressed="#chooseOffice" prefHeight="24.0" prefWidth="260.0" />
             <Label layoutX="14.0" layoutY="160.0" prefHeight="25.0" prefWidth="362.0" text="Odaberite regiju.............................." textFill="BLUE">
                <font>
                   <Font size="18.0" />
                </font>
             </Label>
-            <ChoiceBox layoutX="334.0" layoutY="160.0" prefHeight="24.0" prefWidth="262.0" />
+            <ChoiceBox fx:id="regionField" layoutX="334.0" layoutY="160.0" prefHeight="24.0" prefWidth="262.0" />
          </children>
       </AnchorPane>
    </center>
