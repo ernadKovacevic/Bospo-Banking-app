@@ -15,6 +15,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.DatePicker;
+import javafx.scene.control.Label;
 import javafx.scene.Node;
 import javafx.stage.Stage;
 
@@ -36,6 +37,8 @@ public class ReportController implements Initializable{
     private ChoiceBox<String> branchOfficeField;
     @FXML
     private ChoiceBox<String> officeField;
+
+    //final report frame fields
 
     public void returnToHomeFrame(ActionEvent event) throws IOException{
         root = FXMLLoader.load(getClass().getResource("HomeFrame.fxml"));
@@ -68,7 +71,7 @@ public class ReportController implements Initializable{
 
     }
 
-    public void doReport() throws SQLException{
+    public void doReport() throws SQLException, IOException{
         if(dateFromField.getValue() != null){
             if(dateToField.getValue() != null){
                 if(dateFromField.getValue().isBefore(dateToField.getValue()) 
@@ -93,15 +96,19 @@ public class ReportController implements Initializable{
                             JOptionPane.showMessageDialog(null,"ERROR: ODABERITE PODRUŽNICU");
                         }
                     }
+
+                    while(result.next()){
+                        System.out.println(result.getString(1)+ " | " +result.getString(2) + " | "
+                        + result.getDate(3)+ " | " +result.getDouble(4) + " | " 
+                        + result.getDouble(5)+ " | " +result.getDouble(6) + " | "
+                        + result.getString(7));
+                    } 
                     
                     JOptionPane.showMessageDialog(null,"IZVJEŠTAJ URAĐEN");
-                        while(result.next()){
-                            System.out.println(result.getString(1)+ " | " +result.getString(2) + " | "
-                            + result.getDate(3)+ " | " +result.getDouble(4) + " | " 
-                            + result.getDouble(5)+ " | " +result.getDouble(6) + " | "
-                            + result.getString(7));
-                        }    
-                        clearFields();
+
+                    openFinalReportFrame();
+
+                    clearFields();
                 }else{
                     JOptionPane.showMessageDialog(null,"ERROR: POČETNI DATUM VEĆI OD KRAJNJEG");
                 }
@@ -119,6 +126,18 @@ public class ReportController implements Initializable{
         regionField.setValue("Sve regije");
         branchOfficeField.setValue(null);
         officeField.setValue(null);
+    }
+
+    public void openFinalReportFrame() throws IOException{
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("FinalReportFrame.fxml"));
+        root = loader.load();
+        FinalReportController report = loader.getController();
+        report.changeDateLabels(dateFromField.getValue().toString(),dateToField.getValue().toString());
+        //report.startReportFrame();
+        Stage secondStage = new Stage();
+        secondStage.setTitle("IZVJEŠTAJ");
+        secondStage.setScene(new Scene(root, 700, 500));
+        secondStage.show();
     }
     
 
