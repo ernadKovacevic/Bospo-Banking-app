@@ -48,7 +48,6 @@ public class PaymentController implements Initializable {
                 || startDateField.getValue().isEqual(endDateField.getValue())){
 
                    // if(groupOneField.getValue() != null){
-
                         Statement stmn = Main.dbConnection.createStatement();
                         result = stmn.executeQuery(String.format("SELECT uredIsplata, COUNT(*)"+
                         ",SUM(iznosIsplKredit),MIN(iznosIsplKredit),MAX(iznosIsplKredit),"+

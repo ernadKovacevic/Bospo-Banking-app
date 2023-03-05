@@ -2,6 +2,7 @@ import java.io.IOException;
 import java.net.URL;
 import java.sql.*;
 import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
 import java.util.ResourceBundle;
 
 import javax.swing.JOptionPane;
@@ -63,21 +64,26 @@ public class KomitentController implements Initializable {
             }
             else{
                 try{
+           
                     if(dateField.getValue().isBefore(LocalDate.now())){
-
-                        Statement stmn = Main.dbConnection.createStatement();
-                        stmn.execute(String.format("INSERT INTO Komitent VALUES (%s,%s,%s,%s,%s,%s)"
-                        ,jmbgField.getText()
-                        ,!nameField.getText().isEmpty() ? "\""+nameField.getText()+"\"" : "NULL"
-                        ,!surnameField.getText().isEmpty() ? "\""+surnameField.getText()+"\"" : "NULL"
-                        ,dateField.getValue() != null ? "\""+dateField.getValue()+"\"" : "NULL"
-                        ,cityField.getValue() != null ? "\""+cityField.getValue()+"\"" : "NULL"
-                        ,!addressField.getText().isEmpty() ? "\""+addressField.getText()+"\"" : "NULL"
-                        ));
-
+                        
+                        long days = ChronoUnit.DAYS.between(dateField.getValue(),LocalDate.now());
+                        long years = days/365;
+                        if(years >= 18){
+                            Statement stmn = Main.dbConnection.createStatement();
+                            stmn.execute(String.format("INSERT INTO Komitent VALUES (%s,%s,%s,%s,%s,%s)"
+                            ,jmbgField.getText()
+                            ,!nameField.getText().isEmpty() ? "\""+nameField.getText()+"\"" : "NULL"
+                            ,!surnameField.getText().isEmpty() ? "\""+surnameField.getText()+"\"" : "NULL"
+                            ,dateField.getValue() != null ? "\""+dateField.getValue()+"\"" : "NULL"
+                            ,cityField.getValue() != null ? "\""+cityField.getValue()+"\"" : "NULL"
+                            ,!addressField.getText().isEmpty() ? "\""+addressField.getText()+"\"" : "NULL"
+                            ));
                         JOptionPane.showMessageDialog(null, "NOVI KOMITENT DODAN U BAZU");
-
                         clearFileds();
+                        }else{
+                            JOptionPane.showMessageDialog(null, "KOMITENT NEMA 18 GODINA");
+                        }
                     }else{
                         JOptionPane.showMessageDialog(null, "DATUM VEĆI OD DANAŠNJEG");
                     }
@@ -106,8 +112,8 @@ public class KomitentController implements Initializable {
                         JOptionPane.showMessageDialog(null,"KOMITENT OBRISAN IZ BAZE");
                         clearFileds();
                     }else{
-                        JOptionPane.showMessageDialog(null,"KOMITENT NE POSTOJI U BAZI");
-                    } 
+                        JOptionPane.showMessageDialog(null,"NEDOVOLJAN BROJ GODINA");
+                    }
                 }
                 catch(Exception e){
                     JOptionPane.showMessageDialog(null,"ERROR");
@@ -143,9 +149,16 @@ public class KomitentController implements Initializable {
                         }
 
                         if(dateField.getValue() != null){
-                            if(dateField.getValue().isBefore(LocalDate.now()))
-                                stmn.execute(String.format("UPDATE Komitent SET datumRodjenja = \"%s\" WHERE JMBG = \"%s\""
-                                ,dateField.getValue(),jmbgField.getText()));
+                            if(dateField.getValue().isBefore(LocalDate.now())){
+                                long days = ChronoUnit.DAYS.between(dateField.getValue(),LocalDate.now());
+                                long years = days/365;
+                                if(years >= 18){
+                                    stmn.execute(String.format("UPDATE Komitent SET datumRodjenja = \"%s\" WHERE JMBG = \"%s\""
+                                    ,dateField.getValue(),jmbgField.getText()));
+                                }else{
+                                    JOptionPane.showMessageDialog(null,"NEDOVOLJAN BROJ GODINA");
+                                }
+                            }
                             else{
                                 JOptionPane.showMessageDialog(null,"ERROR: DATUM VEĆI OD DANJAŠNJEG!!!");
                             }
