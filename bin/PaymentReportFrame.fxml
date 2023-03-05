@@ -49,13 +49,12 @@
       </ImageView>
       <TableView fx:id="table" layoutY="91.0" prefHeight="408.0" prefWidth="750.0">
         <columns>
-          <TableColumn fx:id="jmbgColumn" prefWidth="119.0" text="JMBGKomitent" />
-          <TableColumn fx:id="idCreditColumn" prefWidth="82.0" text="idKredit" />
-            <TableColumn fx:id="paymentDateColumn" prefWidth="111.0" text="datumIsplata" />
-            <TableColumn fx:id="amountColumn" prefWidth="126.0" text="iznosIsplKredit" />
-            <TableColumn fx:id="interestRateColumn" minWidth="9.0" prefWidth="116.0" text="kamatnaStopa" />
-            <TableColumn fx:id="repaymentColumn" minWidth="0.0" prefWidth="97.0" text="rokOtplata" />
-            <TableColumn fx:id="officeColumn" prefWidth="98.0" text="ured" />
+          <TableColumn fx:id="colOffice" prefWidth="120.0" text="uredIsplata" />
+          <TableColumn fx:id="colNumOfLoans" prefWidth="118.0" text="brojIsplKredit" />
+            <TableColumn fx:id="colSumOfLoans" prefWidth="137.0" text="iznosIsplKredit" />
+            <TableColumn fx:id="colMinLoan" prefWidth="120.0" text="minIsplKredit" />
+            <TableColumn fx:id="colMaxLoan" minWidth="0.0" prefWidth="127.0" text="maxIsplKredit" />
+            <TableColumn fx:id="colAvgLoan" prefWidth="127.0" text="prosjIznosKredit" />
         </columns>
       </TableView>
    </children>

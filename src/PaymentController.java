@@ -1,5 +1,8 @@
 import java.io.IOException;
 import java.net.URL;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ResourceBundle;
 
 import javax.swing.JOptionPane;
@@ -21,6 +24,7 @@ public class PaymentController implements Initializable {
     private Stage stage;
     private Scene scene;
     private Region region;
+    private ResultSet result;
 
     @FXML
     private DatePicker startDateField;
@@ -37,16 +41,26 @@ public class PaymentController implements Initializable {
         stage.show();
     }
 
-    public void doReport(ActionEvent event) throws IOException{
+    public void doReport(ActionEvent event) throws IOException, SQLException{
         if(startDateField.getValue() != null){
             if(endDateField.getValue() != null){
                 if(startDateField.getValue().isBefore(endDateField.getValue())
                 || startDateField.getValue().isEqual(endDateField.getValue())){
 
+                   // if(groupOneField.getValue() != null){
+
+                        Statement stmn = Main.dbConnection.createStatement();
+                        result = stmn.executeQuery(String.format("SELECT uredIsplata, COUNT(*)"+
+                        ",SUM(iznosIsplKredit),MIN(iznosIsplKredit),MAX(iznosIsplKredit),"+
+                        "AVG(iznosIsplKredit)"+ 
+                        "FROM Kredit WHERE datumIsplata >= \"%s\" AND datumIsplata <= \"%s\""+
+                        "GROUP BY uredIsplata;",startDateField.getValue(),endDateField.getValue()));
+
+                   // }else{
+                    //    JOptionPane.showMessageDialog(null, "ERROR: UNESITE URED PO KOJEM SE GRUPIŠE!");
+                   // }
                     openPaymentReportFrame();
-
-
-
+                    clearFields();
                 }else{
                     JOptionPane.showMessageDialog(null, "ERROR: POČETNI DATUM VEĆI OD KRAJNJEG!");
                 }
@@ -58,13 +72,13 @@ public class PaymentController implements Initializable {
         }
     }
 
-    public void openPaymentReportFrame() throws IOException{
+    public void openPaymentReportFrame() throws IOException, SQLException{
         FXMLLoader loader = new FXMLLoader(getClass().getResource("PaymentReportFrame.fxml"));
         root = loader.load();
         
         PaymentReportController report = loader.getController();
         report.changeDates(startDateField.getValue().toString(), endDateField.getValue().toString());
-
+        report.addToTable(result);
         Stage thirdStage = new Stage();
         thirdStage.setTitle("Izvještaj za isplate");
         thirdStage.setScene(new Scene(root,750,500));
@@ -84,5 +98,10 @@ public class PaymentController implements Initializable {
 
             }
         } 
+    }
+
+    public void clearFields(){
+        startDateField.setValue(null);
+        endDateField.setValue(null);
     }
 }

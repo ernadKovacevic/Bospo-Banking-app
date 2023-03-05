@@ -20,3 +20,16 @@ kamatnaStopa DECIMAL (5,2),
 rokOtplKredit DECIMAL (3,0),
 uredIsplata CHAR(50)
 );
+SET sql_mode = '';
+
+SELECT uredIsplata, COUNT(*), SUM(iznosIsplKredit), MIN(iznosIsplKredit)
+,MAX(iznosIsplKredit), AVG(iznosIsplKredit) FROM Kredit GROUP BY uredIsplata;
+
+
+
+
+
+
+
+
+
