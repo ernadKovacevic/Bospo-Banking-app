@@ -28,11 +28,16 @@ public class BranchOffice {
         String[] temp = new String[numOfOffices];
 
         for(int i = 0; i < numOfOffices; i++){
-            temp[i] = offices[i];
+            temp[i] = this.offices[i];
         }
         
         return temp;
     }
+
+    public String[] getAllOffices(){
+        return this.offices;
+    }
+
 
     public String getName(){
         return this.name;

@@ -44,6 +44,10 @@ public class Region {
         return temp;
     }
 
+    public BranchOffice[] getAllBranchOffices(){
+        return this.branchOffices;
+    }
+
 
 
 

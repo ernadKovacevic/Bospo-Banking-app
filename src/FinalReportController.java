@@ -2,8 +2,6 @@ import java.net.URL;
 import java.sql.*;
 import java.util.ResourceBundle;
 
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Label;
@@ -44,14 +42,11 @@ public class FinalReportController implements Initializable{
 
     public void addToTable(ResultSet rows) throws SQLException{
         while(rows.next()){
-            System.out.println(rows.getString(1)+ " | " +rows.getString(2) + " | "
-                        + rows.getDate(3)+ " | " +rows.getDouble(4) + " | " 
-                        + rows.getDouble(5)+ " | " +rows.getDouble(6) + " | "
-                        + rows.getString(7));
+        
             Credit newCredit = new Credit(
             rows.getString(1), rows.getString(2), rows.getDate(3),
             rows.getDouble(4), rows.getDouble(5), rows.getDouble(6),rows.getString(7));
-            newCredit.print();
+            
             table.getItems().add(newCredit);
         }
     }

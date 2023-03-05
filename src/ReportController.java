@@ -15,7 +15,6 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.DatePicker;
-import javafx.scene.control.Label;
 import javafx.scene.Node;
 import javafx.stage.Stage;
 
@@ -37,8 +36,6 @@ public class ReportController implements Initializable{
     private ChoiceBox<String> branchOfficeField;
     @FXML
     private ChoiceBox<String> officeField;
-
-    //final report frame fields
 
     public void returnToHomeFrame(ActionEvent event) throws IOException{
         root = FXMLLoader.load(getClass().getResource("HomeFrame.fxml"));
@@ -126,7 +123,7 @@ public class ReportController implements Initializable{
         FinalReportController report = loader.getController();
         report.changeDateLabels(dateFromField.getValue().toString(),dateToField.getValue().toString());
         report.addToTable(result);
-        //report.startReportFrame();
+        
         Stage secondStage = new Stage();
         secondStage.setTitle("IZVJEŠTAJ");
         secondStage.setScene(new Scene(root, 750, 500));

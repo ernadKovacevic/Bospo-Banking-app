@@ -5,13 +5,13 @@ import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.property.SimpleStringProperty;
 
 public class Credit {
-    public SimpleStringProperty jmbgKomitent;
-    public SimpleStringProperty idCredit;
-    public SimpleStringProperty paymentDate;
-    public SimpleDoubleProperty amount;
-    public SimpleDoubleProperty interestRate;
-    public SimpleDoubleProperty repaymentMonths;
-    public SimpleStringProperty office;
+    private SimpleStringProperty jmbgKomitent;
+    private SimpleStringProperty idCredit;
+    private SimpleStringProperty paymentDate;
+    private SimpleDoubleProperty amount;
+    private SimpleDoubleProperty interestRate;
+    private SimpleDoubleProperty repaymentMonths;
+    private SimpleStringProperty office;
 
     public Credit(String jmbg, String id, Date date, double amount_,
     double interestRate_, double repaymentMonths_,String office_ ){
