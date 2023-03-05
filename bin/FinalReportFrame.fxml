@@ -11,7 +11,7 @@
 <?import javafx.scene.paint.Color?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="500.0" prefWidth="700.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="FinalReportController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="500.0" prefWidth="750.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="FinalReportController">
    <children>
       <Label layoutX="14.0" layoutY="14.0" text="Početni datum:" textFill="BLUE">
          <font>
@@ -42,20 +42,20 @@
             </InnerShadow>
          </effect>
       </Separator>
-      <ImageView fitHeight="58.0" fitWidth="175.0" layoutX="511.0" layoutY="22.0" pickOnBounds="true" preserveRatio="true">
+      <ImageView fitHeight="71.0" fitWidth="200.0" layoutX="536.0" layoutY="18.0" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@../img/mibospologo_add.png" />
          </image>
       </ImageView>
-      <TableView layoutY="91.0" prefHeight="408.0" prefWidth="700.0">
+      <TableView fx:id="table" layoutY="91.0" prefHeight="408.0" prefWidth="750.0">
         <columns>
-          <TableColumn prefWidth="119.0" text="JMBGKomitent" />
-          <TableColumn prefWidth="82.0" text="idKredit" />
-            <TableColumn prefWidth="111.0" text="datumIsplata" />
-            <TableColumn prefWidth="126.0" text="iznosIsplKredit" />
-            <TableColumn minWidth="9.0" prefWidth="116.0" text="kamatnaStopa" />
-            <TableColumn minWidth="0.0" prefWidth="89.0" text="rokOtplata" />
-            <TableColumn prefWidth="56.0" text="ured" />
+          <TableColumn fx:id="jmbgColumn" prefWidth="119.0" text="JMBGKomitent" />
+          <TableColumn fx:id="idCreditColumn" prefWidth="82.0" text="idKredit" />
+            <TableColumn fx:id="paymentDateColumn" prefWidth="111.0" text="datumIsplata" />
+            <TableColumn fx:id="amountColumn" prefWidth="126.0" text="iznosIsplKredit" />
+            <TableColumn fx:id="interestRateColumn" minWidth="9.0" prefWidth="116.0" text="kamatnaStopa" />
+            <TableColumn fx:id="repaymentColumn" minWidth="0.0" prefWidth="97.0" text="rokOtplata" />
+            <TableColumn fx:id="officeColumn" prefWidth="98.0" text="ured" />
         </columns>
       </TableView>
    </children>

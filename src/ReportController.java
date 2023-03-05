@@ -95,15 +95,7 @@ public class ReportController implements Initializable{
                         }else{
                             JOptionPane.showMessageDialog(null,"ERROR: ODABERITE PODRUŽNICU");
                         }
-                    }
-
-                    while(result.next()){
-                        System.out.println(result.getString(1)+ " | " +result.getString(2) + " | "
-                        + result.getDate(3)+ " | " +result.getDouble(4) + " | " 
-                        + result.getDouble(5)+ " | " +result.getDouble(6) + " | "
-                        + result.getString(7));
-                    } 
-                    
+                    }             
                     JOptionPane.showMessageDialog(null,"IZVJEŠTAJ URAĐEN");
 
                     openFinalReportFrame();
@@ -128,15 +120,16 @@ public class ReportController implements Initializable{
         officeField.setValue(null);
     }
 
-    public void openFinalReportFrame() throws IOException{
+    public void openFinalReportFrame() throws IOException, SQLException{
         FXMLLoader loader = new FXMLLoader(getClass().getResource("FinalReportFrame.fxml"));
         root = loader.load();
         FinalReportController report = loader.getController();
         report.changeDateLabels(dateFromField.getValue().toString(),dateToField.getValue().toString());
+        report.addToTable(result);
         //report.startReportFrame();
         Stage secondStage = new Stage();
         secondStage.setTitle("IZVJEŠTAJ");
-        secondStage.setScene(new Scene(root, 700, 500));
+        secondStage.setScene(new Scene(root, 750, 500));
         secondStage.show();
     }
     
